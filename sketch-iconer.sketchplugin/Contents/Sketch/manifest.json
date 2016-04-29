@@ -1,0 +1,24 @@
+{
+  "author" : "",
+  "commands" : [
+    {
+      "script" : "script.cocoascript",
+      "name" : "sketch-iconer",
+      "handlers" : {
+        "run" : "onRun"
+      },
+      "identifier" : "com.bohemiancoding.sketch.runscriptidentifier"
+    }
+  ],
+  "menu" : {
+    "items" : [
+      "com.bohemiancoding.sketch.runscriptidentifier"
+    ],
+    "title" : "sketch-iconer"
+  },
+  "identifier" : "com.example.sketch.af0bc1cf-ae71-41c5-a47f-ca6d53d7e49c",
+  "version" : "1.0",
+  "description" : "",
+  "authorEmail" : "",
+  "name" : "sketch-iconer"
+}

@@ -1,0 +1,12 @@
+var onRun = function(context) {
+  
+var doc = context.document;
+var artboards = context.document.artboards();
+
+for (var i = 0; i < artboards.count(); i++) {
+	var icon = artboards[i];
+    log(icon.name());
+	//doc.saveArtboardOrSlice_toFile(icon, "~/Sandbox/svg-replace-fills/icons/" + icon.name() + ".svg");
+}
+
+};

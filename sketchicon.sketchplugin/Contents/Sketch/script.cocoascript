@@ -1,0 +1,47 @@
+var PLUGIN_LOCATION = MSPluginManager.pluginsURL().path() + '/sketchicon.sketchplugin';
+var PREVIEW_APPLICATION = 'Google Chrome';
+
+var previewIcons = function (context) {
+	/**
+	 * TODO:
+	 * See if there is a way to determine if app.html is already open in the preview application. This way, we could
+	 * potentially run many things with less dropdown options for the plugin
+	 */
+
+	// Update Icons when opening the previewer
+	updateIcons(context);
+
+	var doc = context.document;
+	var appHtmlFile = PLUGIN_LOCATION + '/Contents/app/app.html';
+
+	if(![[NSWorkspace sharedWorkspace] openFile:appHtmlFile withApplication:PREVIEW_APPLICATION]]) {
+		[doc showMessage:"Failed to open preview file; Make sure '" + PREVIEW_APPLICATION + "' is installed."];
+	}
+};
+
+
+var updateIcons = function (context) {
+	/**
+	 * TODO:
+	 * We'll want to make sure that we delete the contents of the icons folder just in case the plugin was ran with a
+	 * different scketch file
+	 */
+
+	var doc = context.document;
+	var artboards = context.document.artboards();
+
+	var iconFolder = PLUGIN_LOCATION + '/Contents/app/icons/';
+
+	for (var i = 0; i < artboards.count(); i++) {
+		var icon = artboards[i];
+
+		doc.saveArtboardOrSlice_toFile(icon, iconFolder + icon.name() + ".svg");
+	}
+
+	/**
+	 * TODO:
+	 * Figure out how to write to a JavaScript file (icon-manifest.js)
+	 * We can't do a json file, because that can not be requested from the filesystem due to the same-origin policy
+	 * So, we will need to write some JSON to a variable in another script file, and just incldue that
+	 */
+};

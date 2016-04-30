@@ -1,0 +1,33 @@
+{
+	"author": "",
+	"commands": [
+		{
+			"script": "script.cocoascript",
+			"name": "Preview Icons",
+			"handlers": {
+				"run": "previewIcons"
+			},
+			"identifier": "com.bohemiancoding.sketch.previewicons"
+		},
+		{
+			"script": "script.cocoascript",
+			"name": "Update Icons",
+			"handlers": {
+				"run": "updateIcons"
+			},
+			"identifier": "com.bohemiancoding.sketch.updateicons"
+		}
+	],
+	"menu": {
+		"items": [
+			"com.bohemiancoding.sketch.previewicons",
+			"com.bohemiancoding.sketch.updateicons"
+		],
+		"title": "sketchicon"
+	},
+	"identifier": "com.example.sketch.af0bc1cf-ae71-41c5-a47f-ca6d53d7e49c",
+	"version": "1.0",
+	"description": "",
+	"authorEmail": "",
+	"name": "sketchicon"
+}

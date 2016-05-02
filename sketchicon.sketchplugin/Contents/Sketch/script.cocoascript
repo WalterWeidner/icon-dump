@@ -21,15 +21,10 @@ var previewIcons = function (context) {
 
 
 var updateIcons = function (context) {
-	/**
-	 * TODO:
-	 * We'll want to make sure that we delete the contents of the icons folder just in case the plugin was ran with a
-	 * different sketch file
-	 */
 
 	// Store the directories and files we will be working with
-	var saveIconPath = PLUGIN_LOCATION + '/Contents/app/icons/';
-	var saveManifestPath = PLUGIN_LOCATION + '/Contents/app/icon-manifest.js';
+	var saveIconDirectory = PLUGIN_LOCATION + '/Contents/app/icons/';
+	var saveManifestFile = PLUGIN_LOCATION + '/Contents/app/icon-manifest.js';
 
 	var doc = context.document;
 	var artboards = context.document.artboards();
@@ -39,11 +34,15 @@ var updateIcons = function (context) {
 		icons: []
 	};
 
+	// Remove the icons directory so we have a clean save of all the icons
+	[[NSFileManager defaultManager] removeItemAtPath:saveIconDirectory error:nil];
+
+	// For each icon on the artboard
 	for (var i = 0; i < artboards.count(); i++) {
 		var icon = artboards[i];
 
 		// Save the icon to the /icons/ folder
-		doc.saveArtboardOrSlice_toFile(icon, saveIconPath + icon.name() + ".svg")
+		doc.saveArtboardOrSlice_toFile(icon, saveIconDirectory + icon.name() + ".svg");
 
 		// Add the icon to the manifest
 		// Yep... need to fix the way we force to be a string
@@ -53,8 +52,8 @@ var updateIcons = function (context) {
 	// Prepare the data write to icon-manifest.js
 	// Writes:
 	// var iconManifest = {"icons": ["icone-one","icon-two", ... ]};
-	var jsonString = NSString.stringWithUTF8String('var iconManifest = ' + JSON.stringify(iconManifest) + ';');
+	iconManifest = NSString.stringWithUTF8String('var iconManifest = ' + JSON.stringify(iconManifest) + ';');
 
 	// Do the actual write
-	jsonString.dataUsingEncoding_(NSUTF8StringEncoding).writeToFile_atomically_(saveManifestPath, true);
+	iconManifest.dataUsingEncoding_(NSUTF8StringEncoding).writeToFile_atomically_(saveManifestFile, true);
 };

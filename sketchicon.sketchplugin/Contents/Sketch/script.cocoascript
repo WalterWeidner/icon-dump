@@ -24,24 +24,37 @@ var updateIcons = function (context) {
 	/**
 	 * TODO:
 	 * We'll want to make sure that we delete the contents of the icons folder just in case the plugin was ran with a
-	 * different scketch file
+	 * different sketch file
 	 */
+
+	// Store the directories and files we will be working with
+	var saveIconPath = PLUGIN_LOCATION + '/Contents/app/icons/';
+	var saveManifestPath = PLUGIN_LOCATION + '/Contents/app/icon-manifest.js';
 
 	var doc = context.document;
 	var artboards = context.document.artboards();
 
-	var iconFolder = PLUGIN_LOCATION + '/Contents/app/icons/';
+	// This is what will be written to the icon-manifest.js
+	var iconManifest = {
+		icons: []
+	};
 
 	for (var i = 0; i < artboards.count(); i++) {
 		var icon = artboards[i];
 
-		doc.saveArtboardOrSlice_toFile(icon, iconFolder + icon.name() + ".svg");
+		// Save the icon to the /icons/ folder
+		doc.saveArtboardOrSlice_toFile(icon, saveIconPath + icon.name() + ".svg")
+
+		// Add the icon to the manifest
+		// Yep... need to fix the way we force to be a string
+		iconManifest.icons.push('' + icon.name());
 	}
 
-	/**
-	 * TODO:
-	 * Figure out how to write to a JavaScript file (icon-manifest.js)
-	 * We can't do a json file, because that can not be requested from the filesystem due to the same-origin policy
-	 * So, we will need to write some JSON to a variable in another script file, and just incldue that
-	 */
+	// Prepare the data write to icon-manifest.js
+	// Writes:
+	// var iconManifest = {"icons": ["icone-one","icon-two", ... ]};
+	var jsonString = NSString.stringWithUTF8String('var iconManifest = ' + JSON.stringify(iconManifest) + ';');
+
+	// Do the actual write
+	jsonString.dataUsingEncoding_(NSUTF8StringEncoding).writeToFile_atomically_(saveManifestPath, true);
 };

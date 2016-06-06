@@ -16,12 +16,31 @@
 				"run": "updateIcons"
 			},
 			"identifier": "com.bohemiancoding.sketch.updateicons"
+		},
+		{
+			"script": "script.cocoascript",
+			"name": "Export Icons",
+			"handlers": {
+				"run": "exportIcons"
+			},
+			"identifier": "com.bohemiancoding.sketch.exportIcons"
 		}
 	],
 	"menu": {
 		"items": [
-			"com.bohemiancoding.sketch.previewicons",
-			"com.bohemiancoding.sketch.updateicons"
+			{
+				"items": [
+					"com.bohemiancoding.sketch.previewicons",
+					"com.bohemiancoding.sketch.updateicons"
+				],
+				"title": "UX Options"
+			},
+			{
+				"items": [
+					"com.bohemiancoding.sketch.exportIcons"
+				],
+				"title": "Dev Utilities"
+			}
 		],
 		"title": "sketchicon"
 	},

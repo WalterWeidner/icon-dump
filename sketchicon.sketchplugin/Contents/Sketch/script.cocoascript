@@ -1,7 +1,42 @@
-var PLUGIN_LOCATION = MSPluginManager.pluginsURL().path() + '/sketchicon.sketchplugin';
-var PREVIEW_APPLICATION = 'Google Chrome';
+function getMeta() {
+	return {
+		PLUGIN_LOCATION: MSPluginManager.mainPluginsFolderURL().path() + '/sketchicon.sketchplugin',
+		PREVIEW_APPLICATION: 'Google Chrome'
+	}
+}
+
+function dumpIcons(context, path) {
+	log(path);
+	var doc = context.document;
+	var artboards = context.document.artboards();
+
+	var iconNames = [];
+
+
+	// clearDirectory(path);
+
+	// For each icon on the artboard
+	for (var i = 0; i < artboards.count(); i++) {
+		var icon = artboards[i];
+
+		// Save the icon to the /icons/ folder
+		doc.saveArtboardOrSlice_toFile(icon, path + icon.name() + ".svg");
+
+		// Add the icon to the manifest
+		// Yep... need to fix the way we force to be a string
+		iconNames.push('' + icon.name());
+	}
+
+	// Return Icon names in array
+	return iconNames;
+}
+
+function clearDirectory(path) {
+	[[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+}
 
 var previewIcons = function (context) {
+	var meta = getMeta();
 	/**
 	 * TODO:
 	 * See if there is a way to determine if app.html is already open in the preview application. This way, we could
@@ -12,48 +47,47 @@ var previewIcons = function (context) {
 	updateIcons(context);
 
 	var doc = context.document;
-	var appHtmlFile = PLUGIN_LOCATION + '/Contents/app/app.html';
+	var appHtmlFile = meta.PLUGIN_LOCATION + '/Contents/app/app.html';
 
-	if(![[NSWorkspace sharedWorkspace] openFile:appHtmlFile withApplication:PREVIEW_APPLICATION]]) {
-		[doc showMessage:"Failed to open preview file; Make sure '" + PREVIEW_APPLICATION + "' is installed."];
+	if(![[NSWorkspace sharedWorkspace] openFile:appHtmlFile withApplication:meta.PREVIEW_APPLICATION]]) {
+		[doc showMessage:"Failed to open preview file; Make sure '" + meta.PREVIEW_APPLICATION + "' is installed."];
 	}
 };
 
 
 var updateIcons = function (context) {
+	var meta = getMeta();
 
 	// Store the directories and files we will be working with
-	var saveIconDirectory = PLUGIN_LOCATION + '/Contents/app/icons/';
-	var saveManifestFile = PLUGIN_LOCATION + '/Contents/app/icon-manifest.js';
-
-	var doc = context.document;
-	var artboards = context.document.artboards();
+	var saveIconDirectory = meta.PLUGIN_LOCATION + '/Contents/app/icons/';
+	var saveManifestFile = meta.PLUGIN_LOCATION + '/Contents/app/icon-manifest.js';
 
 	// This is what will be written to the icon-manifest.js
 	var iconManifest = {
-		icons: []
+		icons: dumpIcons(context, saveIconDirectory)
 	};
-
-	// Remove the icons directory so we have a clean save of all the icons
-	[[NSFileManager defaultManager] removeItemAtPath:saveIconDirectory error:nil];
-
-	// For each icon on the artboard
-	for (var i = 0; i < artboards.count(); i++) {
-		var icon = artboards[i];
-
-		// Save the icon to the /icons/ folder
-		doc.saveArtboardOrSlice_toFile(icon, saveIconDirectory + icon.name() + ".svg");
-
-		// Add the icon to the manifest
-		// Yep... need to fix the way we force to be a string
-		iconManifest.icons.push('' + icon.name());
-	}
 
 	// Prepare the data write to icon-manifest.js
 	// Writes:
 	// var iconManifest = {"icons": ["icone-one","icon-two", ... ]};
 	iconManifest = NSString.stringWithUTF8String('var iconManifest = ' + JSON.stringify(iconManifest) + ';');
-
 	// Do the actual write
 	iconManifest.dataUsingEncoding_(NSUTF8StringEncoding).writeToFile_atomically_(saveManifestFile, true);
+};
+
+
+var exportIcons = function (context) {
+	var openPanel = NSOpenPanel.openPanel();
+	openPanel.setCanChooseDirectories(true);
+	openPanel.setCanCreateDirectories(true);
+	openPanel.setCanChooseFiles(false);
+	openPanel.setPrompt("Choose an Empty Folder");
+	openPanel.runModal();
+
+	var path = openPanel.URL().path() + '/';
+
+	log(context);
+	log(path);
+
+	dumpIcons(context, path);
 };

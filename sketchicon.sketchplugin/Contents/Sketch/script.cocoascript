@@ -81,7 +81,7 @@ var exportIcons = function (context) {
 	openPanel.setCanChooseDirectories(true);
 	openPanel.setCanCreateDirectories(true);
 	openPanel.setCanChooseFiles(false);
-	openPanel.setPrompt("Choose an Empty Folder");
+	openPanel.setPrompt("Export to Folder");
 	openPanel.runModal();
 
 	var path = openPanel.URL().path() + '/';

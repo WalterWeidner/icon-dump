@@ -30,23 +30,16 @@
 		"items": [
 			{
 				"items": [
-					"com.bohemiancoding.sketch.previewicons",
-					"com.bohemiancoding.sketch.updateicons"
-				],
-				"title": "UX Options"
-			},
-			{
-				"items": [
 					"com.bohemiancoding.sketch.exportIcons"
 				],
 				"title": "Dev Utilities"
 			}
 		],
-		"title": "sketchicon"
+		"title": "IconDump"
 	},
 	"identifier": "com.example.sketch.af0bc1cf-ae71-41c5-a47f-ca6d53d7e49c",
 	"version": "1.0",
-	"description": "",
-	"authorEmail": "",
-	"name": "sketchicon"
+	"description": "Super awesome icon defecation tool",
+	"authorEmail": "kokerlund@bamboohr.com",
+	"name": "IconDump"
 }

@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/kevinokerlund/icon-dump/master/logo.png" width="200px">
+<img src="https://raw.githubusercontent.com/kevinokerlund/icon-dump/master/logo.png" width="200px" align="right">
 # Icon Dump
 
 This small sketch plugin allows a user to export all of the art-boards in a sketch file as an SVG to a directory of their choosing. These art-boards generally contain an isolated icon.
